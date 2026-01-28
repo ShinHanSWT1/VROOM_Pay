@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vroom.vroompay.mapper.WalletMapper">
+
+<!--    지갑 결과값     -->
+
+
+    <!--비관적 락-->
+    <select id="getWalletForUpdate" resultType="com.vroom.vroompay.vo.WalletVO">
+        SELECT
+            user_id as userId, username, balance,avail_balance as availBalance
+             , real_account as realAccount  FROM MEMBERS
+        WHERE user_id = #{userId}
+            FOR UPDATE
+    </select>
+
+    <!--돈 넣기-->
+    <update id="chargeBalance" parameterType="com.vroom.vroompay.vo.WalletVO">
+        UPDATE MEMBERS
+        SET
+            balance = balance + #{balance},
+            avail_balance = avail_balance + #{balance},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+    <!--잔액 확인-->
+    <select id="getWallet" resultType="com.vroom.vroompay.vo.WalletVO">
+        SELECT
+            user_id as userId,
+            username,
+            balance,
+            avail_balance as availBalance
+        FROM MEMBERS
+        WHERE user_id = #{userId}
+    </select>
+
+    <!--지갑 있나 없나 체크-->
+    <select id="checkWalletExist" resultType="int">
+        SELECT COUNT(*) FROM MEMBERS WHERE user_id = #{userId}
+    </select>
+
+    <!--지갑 없으면 생성-->
+    <insert id="createWallet">
+        INSERT INTO MEMBERS (user_id, username, balance, avail_balance, joined_at, updated_at)
+        VALUES (#{userId}, #{username}, 0, 0, NOW(), NOW())
+    </insert>
+
+</mapper>

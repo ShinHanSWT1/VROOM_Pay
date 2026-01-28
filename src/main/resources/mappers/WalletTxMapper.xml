@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vroom.vroompay.mapper.WalletTxMapper">
+
+    <insert id="insertTransaction" parameterType="com.vroom.vroompay.vo.WalletTransactionVO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO WALLET_TRANSACTIONS (
+            user_id,
+            txn_type,
+            amount,
+            balance_snapshot,  memo,              pg_log_id,         created_at
+        ) VALUES (
+                     #{userId},
+                     #{txnType},
+                     #{amount},
+                     #{balanceSnapshot},
+                     #{memo},
+                     #{pgLogId},
+                     NOW()
+                 )
+    </insert>
+
+</mapper>
