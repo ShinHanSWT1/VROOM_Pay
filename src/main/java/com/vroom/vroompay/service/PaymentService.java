@@ -56,7 +56,9 @@ public class PaymentService {
 
         // 장부 기록
         reqVO.setTxnType(TransactionType.CHARGE.name());
-        reqVO.setMemo("충전");
+        if (reqVO.getMemo() == null || reqVO.getMemo().isEmpty()) {
+            reqVO.setMemo("충전");
+        }
         reqVO.setBalanceSnapshot(afterBalance);
 
         txMapper.insertTransaction(reqVO);
@@ -102,8 +104,10 @@ public class PaymentService {
         BigDecimal afterBalance = currentBalance.subtract(withdrawAmount);
 
         // 장부 기록
-        reqVO.setTxnType(TransactionType.WITHDRAW.name()); // ENUM 사용!
-        reqVO.setMemo("출금"); // 나중엔 "친구 송금" 등으로 변경 가능
+        reqVO.setTxnType(TransactionType.WITHDRAW.name());
+        if (reqVO.getMemo() == null || reqVO.getMemo().isEmpty()) {
+            reqVO.setMemo("출금");
+        }
         reqVO.setBalanceSnapshot(afterBalance);
 
         txMapper.insertTransaction(reqVO);

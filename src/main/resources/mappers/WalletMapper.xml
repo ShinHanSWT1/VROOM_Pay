@@ -39,7 +39,8 @@
             user_id as userId,
             username,
             balance,
-            avail_balance as availBalance
+            avail_balance as availBalance,
+            real_account as realAccount
         FROM MEMBERS
         WHERE user_id = #{userId}
     </select>
