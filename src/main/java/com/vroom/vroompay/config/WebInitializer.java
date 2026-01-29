@@ -8,25 +8,25 @@ import javax.servlet.Filter;
 // 서버 스위치
 public class WebInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-    // 1. RootConfig 연결 (DB, MyBatis, 서비스 등)
+    // RootConfig 연결 (DB, MyBatis, 서비스 등)
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] { RootConfig.class };
     }
 
-    // 2. ServletConfig 연결 (컨트롤러, 뷰 리졸버 등)
+    // ServletConfig 연결 (컨트롤러, 뷰 리졸버 등)
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[] { ServletConfig.class };
     }
 
-    // 3. 모든 요청("/")을 스프링이 가로채서 처리함
+    //  모든 요청("/")을 스프링이 가로채서 처리함
     @Override
     protected String[] getServletMappings() {
         return new String[] { "/" };
     }
 
-    // 4. 한글 깨짐 방지 필터 (UTF-8 강제 적용)
+    //  한글 깨짐 방지 필터 (UTF-8 강제 적용)
     @Override
     protected Filter[] getServletFilters() {
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();

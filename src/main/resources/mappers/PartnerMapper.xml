@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 보안 API 키 생성 -->
+
+<!-- 파트너(API 사용자) 관련 SQL -->
+<mapper namespace="com.vroom.vroompay.mapper.PartnerMapper">
+
+    <!-- API 키로 파트너 조회 (활성화된 파트너만) -->
+    <select id="findByApiKey" resultType="com.vroom.vroompay.vo.PartnerVO">
+        SELECT id,
+               partner_name AS partnerName,
+               client_id AS clientId,
+               api_key AS apiKey,
+               is_active AS isActive,
+               created_at AS createdAt
+        FROM PARTNERS
+        WHERE api_key = #{apiKey}
+          AND is_active = 'Y'
+    </select>
+
+</mapper>

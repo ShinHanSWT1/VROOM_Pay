@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 결제 주문 관련 SQL -->
+<mapper namespace="com.vroom.vroompay.mapper.PaymentOrderMapper">
+
+    <!-- 결제 주문 생성 -->
+    <insert id="insertOrder" parameterType="com.vroom.vroompay.vo.PaymentOrderVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO PAYMENT_ORDERS (merchant_uid, amount, status, errands_id, user_id, errander_id)
+        VALUES (#{merchantUid}, #{amount}, 'INIT', #{errandsId}, #{userId}, #{erranderId})
+    </insert>
+
+    <!-- 주문 ID로 조회 -->
+    <select id="findById" resultType="com.vroom.vroompay.vo.PaymentOrderVO">
+        SELECT id,
+               merchant_uid AS merchantUid,
+               amount,
+               status,
+               created_at AS createdAt,
+               paid_at AS paidAt,
+               errands_id AS errandsId,
+               user_id AS userId,
+               errander_id AS erranderId
+        FROM PAYMENT_ORDERS
+        WHERE id = #{id}
+    </select>
+
+    <!-- merchantUid로 조회 -->
+    <select id="findByMerchantUid" resultType="com.vroom.vroompay.vo.PaymentOrderVO">
+        SELECT id,
+               merchant_uid AS merchantUid,
+               amount,
+               status,
+               created_at AS createdAt,
+               paid_at AS paidAt,
+               errands_id AS errandsId,
+               user_id AS userId,
+               errander_id AS erranderId
+        FROM PAYMENT_ORDERS
+        WHERE merchant_uid = #{merchantUid}
+    </select>
+
+    <!-- 상태 업데이트 -->
+    <update id="updateStatus">
+        UPDATE PAYMENT_ORDERS
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 결제 완료 시간 업데이트 -->
+    <update id="updatePaidAt">
+        UPDATE PAYMENT_ORDERS
+        SET paid_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>

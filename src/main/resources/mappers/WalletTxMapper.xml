@@ -8,7 +8,7 @@
             user_id,
             txn_type,
             amount,
-            balance_snapshot,  memo,              pg_log_id,         created_at
+            balance_snapshot,  memo, pg_log_id,created_at
         ) VALUES (
                      #{userId},
                      #{txnType},

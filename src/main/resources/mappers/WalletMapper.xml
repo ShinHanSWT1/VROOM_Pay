@@ -24,6 +24,15 @@
         WHERE user_id = #{userId}
     </update>
 
+    <!-- 돈빼기 -->
+    <update id="deductBalance" parameterType="com.vroom.vroompay.vo.WalletVO">
+        UPDATE MEMBERS
+        SET
+            balance = balance - #{balance},         avail_balance = avail_balance - #{balance},
+            updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
     <!--잔액 확인-->
     <select id="getWallet" resultType="com.vroom.vroompay.vo.WalletVO">
         SELECT
@@ -42,8 +51,40 @@
 
     <!--지갑 없으면 생성-->
     <insert id="createWallet">
-        INSERT INTO MEMBERS (user_id, username, balance, avail_balance, joined_at, updated_at)
-        VALUES (#{userId}, #{username}, 0, 0, NOW(), NOW())
+        INSERT INTO MEMBERS (
+            user_id,
+            username,
+            real_account,
+            balance, avail_balance, joined_at
+        ) VALUES (
+                  #{userId},
+                  #{username},
+                  #{realAccount},
+                  0,
+                  0,
+                  NOW()
+                 )
     </insert>
+
+    <!-- 홀드 - avail_balance 차감 -->
+    <update id="holdBalance">
+        UPDATE MEMBERS
+        SET avail_balance = avail_balance - #{availBalance}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 릴리즈 - avail_balance 복구 -->
+    <update id="releaseBalance">
+        UPDATE MEMBERS
+        SET avail_balance = avail_balance + #{availBalance}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- avail_balance 증가 (수행자가 돈 받을 때) -->
+    <update id="chargeAvailBalance">
+        UPDATE MEMBERS
+        SET avail_balance = avail_balance + #{balance}
+        WHERE user_id = #{userId}
+    </update>
 
 </mapper>

@@ -30,7 +30,7 @@ public class RootConfig {
     @Value("${db.username}") private String username;
     @Value("${db.password}") private String password;
 
-    // 1. HikariCP 데이터소스 설정 (DB 연결)
+    // HikariCP 데이터소스 설정 (DB 연결)
     @Bean
     public DataSource dataSource() {
         HikariConfig hikariConfig = new HikariConfig();
@@ -46,7 +46,7 @@ public class RootConfig {
         return new HikariDataSource(hikariConfig);
     }
 
-    // 2. MyBatis 설정 (SQL 실행 공장)
+    // MyBatis 설정 (SQL 실행 공장)
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
@@ -65,12 +65,17 @@ public class RootConfig {
         return sessionFactory.getObject();
     }
 
-    // 3. 트랜잭션 매니저 (데이터 무결성 보장)
+    // 트랜잭션 매니저 (데이터 무결성 보장)
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
 
 
+    // @Value("${...}")를 해석해주는 필수 Bean
+    @Bean
+    public static org.springframework.context.support.PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new org.springframework.context.support.PropertySourcesPlaceholderConfigurer();
+    }
 
 }

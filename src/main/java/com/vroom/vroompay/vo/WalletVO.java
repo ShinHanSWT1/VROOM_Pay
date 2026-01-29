@@ -1,5 +1,6 @@
 package com.vroom.vroompay.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -8,6 +9,8 @@ import java.util.Date;
 @Data
 public class WalletVO {
     private long userId;         // 사용자 고유 번호
+
+    @JsonProperty("nickname")
     private String username;     // 사용자 이름
 
     private BigDecimal balance;       // 총 잔액
