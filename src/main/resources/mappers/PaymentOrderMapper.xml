@@ -41,6 +41,8 @@
         WHERE merchant_uid = #{merchantUid}
     </select>
 
+
+
     <!-- 상태 업데이트 -->
     <update id="updateStatus">
         UPDATE PAYMENT_ORDERS
@@ -53,6 +55,13 @@
         UPDATE PAYMENT_ORDERS
         SET paid_at = NOW()
         WHERE id = #{id}
+    </update>
+
+    <update id="updateErrander">
+        UPDATE PAYMENT_ORDERS
+        SET errander_id = #{erranderUserId}
+        WHERE id = #{orderId}
+          AND errander_id IS NULL
     </update>
 
 </mapper>

@@ -5,10 +5,11 @@ import com.vroom.vroompay.service.PaymentService;
 import com.vroom.vroompay.vo.PaymentOrderVO;
 import com.vroom.vroompay.vo.WalletTransactionVO;
 import com.vroom.vroompay.vo.WalletVO;
-import lombok.extern.slf4j.Slf4j; // 로깅 라이브러리 추가
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 
 
 @Slf4j // 로그 기능 활성화
@@ -94,5 +95,17 @@ public class PayController {
         log.info("[VroomPay] 결제 취소 요청 - 주문ID: {}", orderId);
 
         return paymentOrderService.cancelOrder(orderId);
+    }
+
+    // payment 업데이트
+    @PostMapping("/order/{orderId}/match")
+    public PaymentOrderVO matchErrander(
+            @PathVariable Long orderId,
+            @RequestBody Map<String, Long> request
+    ) {
+        Long erranderUserId = request.get("erranderUserId");
+        log.info("[VroomPay] 주문 매칭 - orderId={}, erranderId={}", orderId, erranderUserId);
+
+        return paymentOrderService.assignErrander(orderId, erranderUserId);
     }
 }

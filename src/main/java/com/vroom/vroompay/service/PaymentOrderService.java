@@ -188,4 +188,32 @@ public class PaymentOrderService {
         log.info("결제 취소 완료 - 주문ID: {}, 금액: {} 복구됨", orderId, amount);
         return orderMapper.findById(orderId);
     }
+
+
+    @Transactional
+    public PaymentOrderVO assignErrander(Long orderId, Long erranderId) {
+        PaymentOrderVO order = orderMapper.findById(orderId);
+
+        if (order == null) {
+            throw new IllegalStateException("존재하지 않는 주문입니다. orderId=" + orderId);
+        }
+
+        if (order.getErranderId() != null) {
+            throw new IllegalStateException("이미 매칭된 주문입니다. orderId=" + orderId);
+        }
+
+        if (!"INIT".equals(order.getStatus()) && !"PENDING".equals(order.getStatus())) {
+            throw new IllegalStateException(
+                    "매칭 불가능한 주문 상태입니다. status=" + order.getStatus()
+            );
+        }
+
+        log.info("[VroomPay] 주문 매칭 완료 - orderId={}, erranderId={}", orderId, erranderId);
+        orderMapper.updateErrander(orderId, erranderId);
+
+        order.setErranderId(erranderId);
+        return order;
+
+    }
+
 }
