@@ -59,7 +59,7 @@
 
     <update id="updateErrander">
         UPDATE PAYMENT_ORDERS
-        SET errander_id = #{erranderUserId}
+        SET errander_id = #{erranderId}
         WHERE id = #{orderId}
           AND errander_id IS NULL
     </update>
